@@ -206,14 +206,11 @@ as_dmdScheme.xml_document <- function(
           t() %>%
           as.data.frame(stringsAsFactors = FALSE)
 
-        types <- sapply(result[[sheet]], typeof)
-        types <- types[names(types) %in% names(data)]
-
-        data[] <- Map(`class<-`, data,types)
+        data <- vctrs::vec_cast(data, result[[sheet]])
 
         result[[sheet]] <- tibble::add_row(
           result[[sheet]],
-          data
+          !!!data
         )
 
         # As the scheme contains a row with NAs already, this needs to be deleted ----
